@@ -1,16 +1,25 @@
 import pandas as pd
-import os
+from razdel import tokenize
+
+
+
 
 file_path = r'D:\work\practice\parser\vtomske\vtomske.csv'  # замените на ваш путь
+df = pd.read_csv(file_path, sep=';')
 
-if os.path.exists(file_path):
-    df = pd.read_csv(file_path, sep=';', on_bad_lines='skip')
-    
-    print(f"Размер: {df.shape}")
-    print(f"Колонки: {df.columns.tolist()}")
-    print(f"Типы данных:\n{df.dtypes}")
-    print(f"Пропущенные значения:\n{df.isnull().sum()}")
-    print("\nПервые 5 строк:")
-    print(df.head())
-else:
-    print(f"Файл не найден по пути: {file_path}")
+texts = df['title']
+
+token_data = []
+for i, text in enumerate(texts):
+    print(f'Текст номер {i}')
+    tokens = [token.text for token in tokenize(text)]
+    print(tokens)
+    token_data.append({
+        'number': i,
+        'tokens': tokens
+    })
+    if i > 3:
+        break
+
+
+print(token_data[0])
